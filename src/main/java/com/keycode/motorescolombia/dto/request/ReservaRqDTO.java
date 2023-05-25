@@ -14,4 +14,7 @@ public class ReservaRqDTO {
     @NotNull(message = "El usuario es requerido")
     private String usuario;
 
+    @NotNull(message = "El usuario es requerido")
+    private Long agenteId;
+
 }

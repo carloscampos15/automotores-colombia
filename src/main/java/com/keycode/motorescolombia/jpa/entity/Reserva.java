@@ -1,15 +1,12 @@
 package com.keycode.motorescolombia.jpa.entity;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.time.LocalDateTime;
+import java.util.Date;
 
 @Entity
 @Table(name = "reserva")
@@ -21,11 +18,19 @@ public class Reserva {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
-    @JoinColumn(name = "automotor_id", referencedColumnName = "id", nullable = false)
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "automotor_id", referencedColumnName = "id", nullable = false, unique = true)
     private Automotor automotor;
 
     @Column(nullable = false)
     private String usuario;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "agente_id", referencedColumnName = "id", nullable = false)
+    private Agente agente;
+
+    @CreationTimestamp
+    @Column(nullable = false)
+    private Date createdAt = new Date();
 
 }

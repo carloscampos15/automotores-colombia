@@ -5,23 +5,19 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Entity
-@Table(name = "automotor")
+@Table(name = "agente")
 @Getter
 @Setter
-public class Automotor {
+public class Agente {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String marca;
-
-    private Long modelo;
-
-    private String linea;
+    private String nombre;
 
     @ManyToOne
-    @JoinColumn(name = "gama_id", referencedColumnName = "id")
-    private Gama gama;
+    @JoinColumn(name = "ciudad_id", referencedColumnName = "id", nullable = false)
+    private Ciudad ciudad;
 
 }
