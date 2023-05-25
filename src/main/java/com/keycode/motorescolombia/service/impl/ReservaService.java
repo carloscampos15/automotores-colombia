@@ -1,5 +1,6 @@
 package com.keycode.motorescolombia.service.impl;
 
+import com.keycode.motorescolombia.dto.ReservaDTO;
 import com.keycode.motorescolombia.dto.request.ReservaRqDTO;
 import com.keycode.motorescolombia.exception.NotFoundException;
 import com.keycode.motorescolombia.jpa.entity.Automotor;
@@ -8,9 +9,13 @@ import com.keycode.motorescolombia.jpa.repository.ReservaRepository;
 import com.keycode.motorescolombia.service.IReservaService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -18,6 +23,9 @@ public class ReservaService implements IReservaService {
 
     private final ReservaRepository reservaRepository;
     private final AutomotorService automotorService;
+
+    @Autowired
+    private ModelMapper mapper;
 
     @Override
     public void crearReserva(ReservaRqDTO reservaRqDTO) throws NotFoundException {
@@ -57,6 +65,20 @@ public class ReservaService implements IReservaService {
 
         automotorService.asignarReserva(automotor, reserva);
         // automotorService.asignarReserva(automotor, new Reserva());
+    }
+
+    @Override
+    public List<ReservaDTO> findReservasByUsuario(String usuario) {
+        return reservaRepository
+                .obtenerReservasByUsuarioNative(usuario)
+                .stream()
+                .map(reserva -> {
+                    ReservaDTO reservaDTO = mapper.map(reserva, ReservaDTO.class);
+                    reservaDTO.setAutomotorCompleto(
+                            reserva.getAutomotor().getMarca() + " " + reserva.getAutomotor().getLinea() + " " + reserva.getAutomotor().getModelo());
+                    return reservaDTO;
+                })
+                .collect(Collectors.toList());
     }
 
 }
