@@ -41,4 +41,15 @@ public interface ReservaRepository extends JpaRepository<Reserva, Long> {
     )
     List<Reserva> getReservasByCiudadNative(@Param("ciudad") Long ciudad);
 
+    @Query(
+            value =
+                    """
+                        SELECT
+                            re
+                        FROM Reserva re
+                        WHERE re.automotor.marca = :marca
+                    """
+    )
+    List<Reserva> getReservasByMarca(String marca);
+
 }

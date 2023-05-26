@@ -68,4 +68,10 @@ public class ReservaService implements IReservaService {
         //return reservaRepository.getReservasByCiudadNative(ciudad);
     }
 
+    @Override
+    public List<Reserva> getReservasByMarca(String marca) {
+        return reservaRepository.getReservasByMarca(marca);
+    }
+
+
 }

@@ -10,6 +10,7 @@ import com.keycode.motorescolombia.dto.request.ReservaRqDTO;
 import com.keycode.motorescolombia.service.IReservaService;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @RequestMapping("/reserva")
@@ -18,10 +19,10 @@ public class ReservaController {
     @Autowired
     private IReservaService reservaService;
 
-    @GetMapping
+/*    @GetMapping
     public List<ReservaDTO> getReservas(@RequestParam("usuario") String usuario){
         return reservaService.findReservasByUsuario(usuario);
-    }
+    }*/
 
     @PostMapping
     public void crearReserva(@RequestBody ReservaRqDTO request) {
@@ -42,8 +43,17 @@ public class ReservaController {
     }
 
     @GetMapping
-    public List<Reserva> getReservasByCiudad(@RequestParam("ciudad") Long ciudad){
-        return reservaService.getReservasByCiudad(ciudad);
+    public List<Reserva> getReservasByCiudad(@RequestParam(value = "ciudad",required = false) Long ciudad, @RequestParam(value = "marca",required = false) String marca){
+        if (Objects.nonNull(ciudad)){
+            return reservaService.getReservasByCiudad(ciudad);
+        } else {
+            return reservaService.getReservasByMarca(marca);
+        }
+
     }
+    /*@GetMapping("/filtro")
+    public List<Reserva> getReservasByMarca(@RequestParam("marca") String marca){
+
+    }*/
 
 }
