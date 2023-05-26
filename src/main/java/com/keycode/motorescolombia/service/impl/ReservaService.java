@@ -2,15 +2,18 @@ package com.keycode.motorescolombia.service.impl;
 
 import com.keycode.motorescolombia.dto.request.ReservaRqDTO;
 import com.keycode.motorescolombia.exception.NotFoundException;
+import com.keycode.motorescolombia.jpa.entity.Agente;
 import com.keycode.motorescolombia.jpa.entity.Automotor;
 import com.keycode.motorescolombia.jpa.entity.Reserva;
+import com.keycode.motorescolombia.jpa.repository.AgenteRepository;
 import com.keycode.motorescolombia.jpa.repository.ReservaRepository;
+import com.keycode.motorescolombia.jpa.repository.ReservaViewRepository;
 import com.keycode.motorescolombia.service.IReservaService;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.Objects;
+import java.util.List;
 
 @Service
 @AllArgsConstructor
@@ -18,23 +21,22 @@ public class ReservaService implements IReservaService {
 
     private final ReservaRepository reservaRepository;
     private final AutomotorService automotorService;
+    private final AgenteRepository agenteRepository;
+    private final ReservaViewRepository reservaViewRepository;
 
     @Override
     public void crearReserva(ReservaRqDTO reservaRqDTO) throws NotFoundException {
         Automotor automotor = automotorService.obtenerAutomotorById(reservaRqDTO.getIdAutomotor());
+        Agente agente = agenteRepository
+                .findById(reservaRqDTO.getAgenteId())
+                .orElseThrow(() -> new NotFoundException(String.format("El agente de id %s no existe.", reservaRqDTO.getAgenteId())));
 
-        if (Objects.isNull(automotor.getReserva())) {
-            Reserva reserva = new Reserva();
-            reserva.setAutomotor(automotor);
-            reserva.setUsuario(reservaRqDTO.getUsuario());
+        Reserva reserva = new Reserva();
+        reserva.setAutomotor(automotor);
+        reserva.setUsuario(reservaRqDTO.getUsuario());
+        reserva.setAgente(agente);
 
-            reservaRepository.save(reserva);
-
-            automotorService.asignarReserva(automotor, reserva);
-        } else {
-            throw new NotFoundException(
-                    String.format("El vehículo con id %s ya se encuentra reservado", reservaRqDTO.getIdAutomotor()));
-        }
+        reservaRepository.save(reserva);
     }
 
     @Transactional(rollbackOn = RuntimeException.class)
@@ -57,6 +59,19 @@ public class ReservaService implements IReservaService {
 
         automotorService.asignarReserva(automotor, reserva);
         // automotorService.asignarReserva(automotor, new Reserva());
+    }
+
+    @Override
+    public List<Reserva> getReservasByCiudad(Long ciudad) {
+        reservaViewRepository.getAllReservasView();
+        return reservaRepository.getReservasByCiudad(ciudad);
+        //return reservaRepository.getReservasByCiudadNative(ciudad);
+    }
+
+    @Override
+    public List<Reserva> getReservasByUsuario(String usuario) {
+        reservaViewRepository.getAllReservasView();
+        return reservaRepository.getReservasByUsuario(usuario);
     }
 
 }

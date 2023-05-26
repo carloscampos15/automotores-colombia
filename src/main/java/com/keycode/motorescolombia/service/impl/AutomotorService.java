@@ -38,12 +38,13 @@ public class AutomotorService implements IAutomotorService {
     public List<AutomotorDTO> obtenerAutomotores(int page) {
         Pageable paginacion = PageRequest.of(page, 10, Sort.by("linea"));
 
-        return Stream.of(automotorRepository
-                .findAllByReserva(paginacion, null)
-                .get()).collect(Collectors.toList())
-                .stream()
-                .map(automotor -> mapper.map(automotor, AutomotorDTO.class))
-                .collect(Collectors.toList());
+//        return Stream.of(automotorRepository
+//                .findAllByReserva(paginacion, null)
+//                .get()).collect(Collectors.toList())
+//                .stream()
+//                .map(automotor -> mapper.map(automotor, AutomotorDTO.class))
+//                .collect(Collectors.toList());
+        return null;
     }
 
     @Override
@@ -55,12 +56,12 @@ public class AutomotorService implements IAutomotorService {
                 .map(automotor -> {
                     AutomotorDTO automotorDTO = mapper.map(automotor, AutomotorDTO.class);
 
-                    if (Objects.nonNull(automotorDTO.getReserva())) {
-                        ReservaDTO reservaDTO = automotorDTO.getReserva();
-                        reservaDTO.setAutomotorCompleto(
-                                automotor.getMarca() + " " + automotor.getLinea() + " " + automotor.getModelo());
-                        automotorDTO.setReserva(reservaDTO);
-                    }
+//                    if (Objects.nonNull(automotorDTO.getReserva())) {
+//                        ReservaDTO reservaDTO = automotorDTO.getReserva();
+//                        reservaDTO.setAutomotorCompleto(
+//                                automotor.getMarca() + " " + automotor.getLinea() + " " + automotor.getModelo());
+//                        automotorDTO.setReserva(reservaDTO);
+//                    }
 
                     return automotorDTO;
                 })
@@ -77,7 +78,6 @@ public class AutomotorService implements IAutomotorService {
 
     @Override
     public void asignarReserva(Automotor automotor, Reserva reserva) {
-        automotor.setReserva(reserva);
         automotorRepository.save(automotor);
     }
 

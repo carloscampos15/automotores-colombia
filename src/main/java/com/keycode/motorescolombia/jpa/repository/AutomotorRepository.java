@@ -13,7 +13,7 @@ import com.keycode.motorescolombia.jpa.entity.Reserva;
 @Repository
 public interface AutomotorRepository extends PagingAndSortingRepository<Automotor, Long> {
 
-    Page<Automotor> findAllByReserva(Pageable pageable, Reserva reserva);
+//    Page<Automotor> findAllByReserva(Pageable pageable, Reserva reserva);
 
     Optional<Automotor> findById(Long id);
 

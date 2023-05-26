@@ -4,7 +4,7 @@ spring:
   datasource:
     url: jdbc:mariadb://127.0.0.1:3306/motorescolombia
     username: root
-    password: finanz
+    password: root
     driver-class-name: org.mariadb.jdbc.Driver
   jpa:
     database-platform: org.hibernate.dialect.MariaDBDialect
