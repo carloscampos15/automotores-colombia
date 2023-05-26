@@ -12,14 +12,33 @@ import java.util.List;
 public interface ReservaRepository extends JpaRepository<Reserva, Long> {
 
     @Query(
-            value = "SELECT R FROM Reserva R WHERE R.usuario = :usuario"
+            value =
+            """
+                SELECT
+                	re
+                FROM
+                    Reserva re
+                WHERE
+                    re.agente.ciudad.id = :ciudad
+            """
     )
-    List<Reserva> obtenerReservasByUsuario(String usuario);
+    List<Reserva> getReservasByCiudad(Long ciudad);
 
     @Query(
-            value = "SELECT * FROM reserva WHERE usuario = :usuario",
+            value =
+            """
+                SELECT
+                	re.*
+                FROM reserva re
+                INNER 
+                    JOIN agente ag ON ag.id = re.agente_id
+                INNER 
+                    JOIN ciudad ci ON ci.id = ag.ciudad_id
+                WHERE 
+                    ag.ciudad_id = :ciudad
+            """,
             nativeQuery = true
     )
-    List<Reserva> obtenerReservasByUsuarioNative(String usuario);
+    List<Reserva> getReservasByCiudadNative(@Param("ciudad") Long ciudad);
 
 }

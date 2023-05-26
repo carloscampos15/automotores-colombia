@@ -9,6 +9,4 @@ public class AutomotorDTO {
     private String marca;
     private Long modelo;
     private String linea;
-    private ReservaDTO reserva;
-
 }

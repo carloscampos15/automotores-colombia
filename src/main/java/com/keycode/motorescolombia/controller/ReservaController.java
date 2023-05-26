@@ -2,6 +2,7 @@ package com.keycode.motorescolombia.controller;
 
 import com.keycode.motorescolombia.dto.ReservaDTO;
 import com.keycode.motorescolombia.exception.NotFoundException;
+import com.keycode.motorescolombia.jpa.entity.Reserva;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,6 +39,11 @@ public class ReservaController {
         } catch (NotFoundException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @GetMapping
+    public List<Reserva> getReservasByCiudad(@RequestParam("ciudad") Long ciudad){
+        return reservaService.getReservasByCiudad(ciudad);
     }
 
 }
