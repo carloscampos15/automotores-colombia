@@ -1,12 +1,11 @@
 package com.keycode.motorescolombia.controller;
 
+import com.keycode.motorescolombia.dto.out.ReservaDtoOut;
 import com.keycode.motorescolombia.exception.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import com.keycode.motorescolombia.dto.request.ReservaRqDTO;
 import com.keycode.motorescolombia.service.IReservaService;
@@ -35,5 +34,15 @@ public class ReservaController {
             throw new RuntimeException(e);
         }
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<ReservaDtoOut> getReservaById(@PathVariable("id") Long id){
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(reservaService.getReservaById(id));
+        } catch (NotFoundException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 
 }
